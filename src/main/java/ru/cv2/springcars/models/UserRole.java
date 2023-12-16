@@ -17,4 +17,5 @@ public class UserRole extends BaseEntity {
     @NotNull(message = "User role cannot be null.")
     @Column(nullable = false)
     private Role userRole;
+
 }

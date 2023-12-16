@@ -20,7 +20,7 @@ import ru.cv2.springcars.models.enums.Transmission;
 @NoArgsConstructor
 public class Offer extends BaseExtended {
     @NotBlank(message = "Description cannot be null")
-    @Size(max = 1000, message = "Max length is 1000.")
+    @Size(max = 255, message = "Max length is 1000.")
     private String description;
 
     @NotNull(message = "Engine cannot be null")

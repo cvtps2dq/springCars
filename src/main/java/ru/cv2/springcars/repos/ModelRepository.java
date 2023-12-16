@@ -10,5 +10,5 @@ import java.util.UUID;
 
 @Repository
 public interface ModelRepository extends JpaRepository<Model, UUID> {
-    List<Model> findAllByOrderByStartYearAsc(Pageable pageable);
+    //List<Model> findAllByOrderByStartYearAsc(Pageable pageable);
 }

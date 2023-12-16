@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.cv2.springcars.mapping.MappingUtility;
 import ru.cv2.springcars.models.Brand;
@@ -12,12 +11,14 @@ import ru.cv2.springcars.models.dto.BrandDTO;
 import ru.cv2.springcars.repos.BrandRepository;
 import ru.cv2.springcars.services.BaseService;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-public class BrandServiceImpl implements BaseService<BrandDTO, Brand> {
+public class BrandService implements BaseService<BrandDTO, Brand> {
     private BrandRepository brandRepository;
     private MappingUtility mappingUtility;
     @Autowired
@@ -33,6 +34,16 @@ public class BrandServiceImpl implements BaseService<BrandDTO, Brand> {
     public BrandDTO create(Brand brand) {
         Brand created = brandRepository.save(brand);
         return mappingUtility.convertToDto(created);
+    }
+
+    public List<BrandDTO> alphabetSort(){
+        List<BrandDTO> brands =
+        brandRepository.findAll().stream()
+                .map(mappingUtility::convertToDto)
+                .collect(Collectors.toList());
+
+         brands.sort(Comparator.comparing(BrandDTO::getName));
+         return brands;
     }
     @CachePut(value = "brands", key = "#id")
     @Override
