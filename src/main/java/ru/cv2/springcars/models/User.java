@@ -38,7 +38,7 @@ public class User extends BaseExtended {
     @NotNull(message = "Active status must be specified.")
     private Boolean isActive;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(name = "role_id")
     private UserRole role;
 

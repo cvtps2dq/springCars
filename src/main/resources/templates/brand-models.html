@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost&display=swap" rel="stylesheet">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brand List</title>
+</head>
+<style>
+    body {
+        font-family: 'Jost', sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f8f8f8;
+    }
+
+    header {
+        background-color: #333;
+        color: #fff;
+        text-align: center;
+        padding: 1em;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    img {
+        max-width: 100px;
+        max-height: 60px;
+    }
+</style>
+<body>
+<h1>Models List</h1>
+<table>
+    <thead>
+    <tr>
+        <th>22Название модели</th>
+        <th>Категория</th>
+        <th>Год произв.</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="model : ${models}">
+        <td th:text="${model.name}"></td>
+        <td th:text="${model.category}"></td>
+        <td th:text="${model.startYear}"></td>
+
+        <!-- Добавьте ссылку для каждого бренда -->
+
+    </tr>
+    </tbody>
+</table>
+<!-- Add links or buttons for creating new brands, updating, and deleting -->
+</body>
+</html>

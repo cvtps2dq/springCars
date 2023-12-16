@@ -11,8 +11,7 @@ import ru.cv2.springcars.models.dto.OfferDTO;
 import ru.cv2.springcars.repos.OfferRepository;
 import ru.cv2.springcars.services.BaseService;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 @Service
 public class OfferService implements BaseService<OfferDTO, Offer> {
@@ -76,5 +75,37 @@ public class OfferService implements BaseService<OfferDTO, Offer> {
         return offers.stream()
                 .map(mappingUtility::convertToDto)
                 .collect(Collectors.toList());
+    }
+
+    @Cacheable(value = "offers", key = "#root.methodName")
+    public List<OfferDTO> dayPack(){
+        Random random = new Random();
+        List<OfferDTO> result = new ArrayList<>();
+        List<OfferDTO> input = offerRepository.findAll().stream()
+                .map(mappingUtility::convertToDto)
+                .collect(Collectors.toList());
+
+        input.sort(Comparator.comparing(OfferDTO::getPrice));
+        // Get random lower values
+        Random rand = new Random();
+        for (int i = 0; i < 3; i++) {
+            result.add(input.get(rand.nextInt(input.size() / 3))); // Lower third
+        }
+
+        // Get mid values
+        for (int i = 0; i < 3; i++) {
+            result.add(input.get(input.size() / 2 + rand.nextInt(input.size() / 3))); // Middle third
+        }
+
+        // Get high values
+        for (int i = 0; i < 3; i++) {
+            result.add(input.get(input.size() - 1 - rand.nextInt(input.size() / 3))); // Upper third
+        }
+
+        for (OfferDTO offerDTO : result){
+            System.out.println(offerDTO);
+        }
+
+        return result;
     }
 }

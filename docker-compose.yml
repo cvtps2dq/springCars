@@ -1,0 +1,124 @@
+version: "3"
+services:
+  cardb:
+    image: postgres:latest
+    container_name: postgres_carsDB
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USERNAME: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: cardb
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    networks:
+      local:
+  prometheus:
+    image: bitnami/prometheus
+    container_name: prometheus_lab2
+    ports:
+      - "9090:9090"
+    networks:
+      local:
+    volumes:
+      - ./src/main/resources/prometheus.yml:/etc/prometheus/prometheus.yml
+    restart: always
+  grafana:
+    image: grafana/grafana
+    container_name: grafana_lab2
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_SECURITY_ADMIN_USER: admin
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./grafana/dashboard.yml:/etc/grafana/provisioning/dashboards/main.yml
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+    networks:
+      local:
+    depends_on:
+      - prometheus
+  service:
+    build:
+      context: .
+    image: lab2spring:0.2.8
+    container_name: service-backend
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 20s
+      timeout: 20s
+      retries: 5
+    depends_on:
+      - cardb
+      - prometheus
+      - redis
+      - logstash
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_DATASOURCE_URL: jdbc:postgresql://cardb:5432/cardb
+      LOGGING_LEVEL_ORG.THYMELEAF: ERROR
+    networks:
+      local:
+
+  elasticsearch:
+    image: elasticsearch:8.7.0
+    container_name: elasticsearch_lab2
+    environment:
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "discovery.type=single-node"
+      - xpack.security.enabled=false
+    ports:
+      - "9200:9200"
+    volumes:
+      - elastic_lab2:/usr/share/elasticsearch/data
+    networks:
+      local:
+
+  kibana:
+    image: kibana:8.7.0
+    container_name: kibana_lab2
+    ports:
+      - "5601:5601"
+    environment:
+      ELASTICSEARCH_URL: http://elasticsearch:9200
+      ELASTICSEARCH_HOSTS: '["http://elasticsearch:9200"]'
+    depends_on:
+      - elasticsearch
+    networks:
+      local:
+
+  logstash:
+    image: logstash:8.7.0
+    container_name: logstash_lab2
+    volumes:
+      - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
+      - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
+    ports:
+      - "5044:5044"
+      - "6000:5000/tcp"
+      - "6000:5000/udp"
+      - "9600:9600"
+    environment:
+      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+    networks:
+      local:
+    depends_on:
+      - elasticsearch
+  redis:
+    image: redis
+    container_name: redis
+    ports:
+      - "6379:6379"
+
+networks:
+  local:
+    driver: bridge
+volumes:
+  elastic_lab2:
+    driver: local
+  pg_data:
+    driver: local

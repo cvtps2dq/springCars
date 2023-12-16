@@ -8,11 +8,15 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
 import ru.cv2.springcars.mapping.MappingUtility;
+import ru.cv2.springcars.models.Brand;
 import ru.cv2.springcars.models.Model;
+import ru.cv2.springcars.models.dto.BrandDTO;
 import ru.cv2.springcars.models.dto.ModelDTO;
+import ru.cv2.springcars.repos.BrandRepository;
 import ru.cv2.springcars.repos.ModelRepository;
 import ru.cv2.springcars.services.BaseService;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -22,6 +26,12 @@ public class ModelService implements BaseService<ModelDTO, Model> {
 
     private ModelRepository modelRepository;
     private MappingUtility mappingUtility;
+    private BrandRepository brandRepository;
+
+    @Autowired
+    public void setBrandRepository(BrandRepository brandRepository) {
+        this.brandRepository = brandRepository;
+    }
 
     @Autowired
     public void setModelRepository(ModelRepository modelRepository) {
@@ -38,6 +48,19 @@ public class ModelService implements BaseService<ModelDTO, Model> {
     public ModelDTO create(Model model) {
         Model created = modelRepository.save(model);
         return mappingUtility.convertToDto(created);
+    }
+
+    @CachePut(value = "models", key = "#result.id")
+    public List<ModelDTO> getAllByBrandId(UUID brandId){
+
+        List<ModelDTO> models = modelRepository.findAllByBrandId(brandId).stream()
+                .map(mappingUtility::convertToDto)
+                .collect(Collectors.toList());
+
+        models.sort(Comparator.comparing(ModelDTO::getName));
+
+        return models;
+
     }
 
     @CachePut(value = "models", key = "#id")
@@ -79,4 +102,5 @@ public class ModelService implements BaseService<ModelDTO, Model> {
                 .map(mappingUtility::convertToDto)
                 .collect(Collectors.toList());
     }
+
 }

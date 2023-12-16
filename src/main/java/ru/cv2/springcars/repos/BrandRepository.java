@@ -12,5 +12,5 @@ import java.util.UUID;
 @Repository
 public interface BrandRepository extends JpaRepository<Brand, UUID> {
     @Query("SELECT b FROM Brand b LEFT JOIN b.models m GROUP BY b ORDER BY COUNT(m) DESC")
-    List<Brand> findMostPopular(Pageable pageable);
+    List<Brand> findMostPopular();
 }

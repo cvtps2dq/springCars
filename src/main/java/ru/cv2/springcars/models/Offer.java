@@ -7,7 +7,6 @@ import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.Singular;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import ru.cv2.springcars.models.abstracts.BaseExtended;
@@ -15,22 +14,22 @@ import ru.cv2.springcars.models.enums.Engine;
 import ru.cv2.springcars.models.enums.Transmission;
 
 @Entity
-@Getter
 @Setter
+@Getter
 @NoArgsConstructor
 public class Offer extends BaseExtended {
-    @NotBlank(message = "Description cannot be null")
-    @Size(max = 1000, message = "Max length is 1000.")
+    @NotBlank(message = "Description cannot be blank")
+    @Size(max = 1000, message = "Description must not exceed 1000 characters")
     private String description;
 
-    @NotNull(message = "Engine cannot be null")
+    @NotNull(message = "Engine type must be specified")
     private Engine engine;
 
     @Pattern(regexp = "^(http|https)://.*\\.(jpg|png|gif|bmp)$", message = "Image URL must be a valid image URL")
     private String imageUrl;
 
     @NotNull(message = "Mileage must be specified")
-    @Min(value = 0, message = "Mileage must be positive")
+    @Min(value = 0, message = "Mileage must be a positive number")
     private Integer mileage;
 
     @NotNull(message = "Price must be specified")
@@ -40,9 +39,9 @@ public class Offer extends BaseExtended {
     @NotNull(message = "Transmission type must be specified")
     private Transmission transmission;
 
-    @NotNull(message = "Year must be specified")
-    @Min(value = 1900, message = "Year must be no earlier than 1900")
-    @Max(value = 2100, message = "Year must be no later than 2100")
+    @NotNull(message = "Year of manufacture must be specified")
+    @Min(value = 1900, message = "Year of manufacture must be no earlier than 1900")
+    @Max(value = 2100, message = "Year of manufacture must be no later than 2100")
     private Integer year;
 
     @ManyToOne
