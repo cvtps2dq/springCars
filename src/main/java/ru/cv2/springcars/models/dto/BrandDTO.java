@@ -9,6 +9,6 @@ import java.util.UUID;
 public class BrandDTO {
     private UUID id;
     private String name;
-    private Date created;
-    private Date modified;
+    private String created;
+    private String modified;
 }

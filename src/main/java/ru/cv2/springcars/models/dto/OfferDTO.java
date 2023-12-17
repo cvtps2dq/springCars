@@ -15,8 +15,8 @@ public class OfferDTO {
     private Double price;
     private String transmission;
     private Integer year;
-    private Date created;
-    private Date modified;
+    private String created;
+    private String modified;
     private ModelDTO model;
     private UserDTO seller;
 }

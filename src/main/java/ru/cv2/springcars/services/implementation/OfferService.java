@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Service;
 import ru.cv2.springcars.mapping.MappingUtility;
 import ru.cv2.springcars.models.Offer;
@@ -14,6 +15,7 @@ import ru.cv2.springcars.services.BaseService;
 import java.util.*;
 import java.util.stream.Collectors;
 @Service
+@EnableCaching
 public class OfferService implements BaseService<OfferDTO, Offer> {
     private OfferRepository offerRepository;
     private MappingUtility mappingUtility;

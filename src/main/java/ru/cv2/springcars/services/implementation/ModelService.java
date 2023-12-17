@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
 import ru.cv2.springcars.mapping.MappingUtility;
@@ -22,6 +23,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
+@EnableCaching
 public class ModelService implements BaseService<ModelDTO, Model> {
 
     private ModelRepository modelRepository;
@@ -50,7 +52,7 @@ public class ModelService implements BaseService<ModelDTO, Model> {
         return mappingUtility.convertToDto(created);
     }
 
-    @CachePut(value = "models", key = "#result.id")
+    @Cacheable(value = "models", key = "#brandId")
     public List<ModelDTO> getAllByBrandId(UUID brandId){
 
         List<ModelDTO> models = modelRepository.findAllByBrandId(brandId).stream()

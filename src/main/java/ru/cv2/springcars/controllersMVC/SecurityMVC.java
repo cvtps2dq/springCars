@@ -21,11 +21,11 @@ import java.text.MessageFormat;
 @Controller
 @RequestMapping("/auth")
 @Slf4j
-public class SecurityController {
+public class SecurityMVC {
     private final UserService userService;
 
     @Autowired
-    public SecurityController(UserService userService) {
+    public SecurityMVC(UserService userService) {
         this.userService = userService;
     }
 
@@ -41,6 +41,7 @@ public class SecurityController {
 
     @RequestMapping(value = "/logout", method = RequestMethod.POST)
     public void logout(HttpServletRequest request, HttpServletResponse response) {
+        log.info("Logout invoked");
         SecurityContextLogoutHandler securityContextLogoutHandler = new SecurityContextLogoutHandler();
         securityContextLogoutHandler.logout(request, response, null);
     }
@@ -48,6 +49,7 @@ public class SecurityController {
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
     public String getRegistrationPage(Model model) {
         model.addAttribute(initUser());
+        log.info("Registration invoked");
         return "registration";
     }
 
@@ -56,6 +58,7 @@ public class SecurityController {
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("user", userDTO);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.user", bindingResult);
+            log.info("Registration successful.");
             return MessageFormat.format("{0}{1}{2}", "redirect:", "/auth", "/registration");
         }
         try {
@@ -64,6 +67,7 @@ public class SecurityController {
             redirectAttributes.addFlashAttribute("error", "Ошибка! Пользователь уже сущетсвует");
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.user",
                     bindingResult);
+            log.info("Registration failed! User exists!");
             return MessageFormat.format("{0}{1}{2}", "redirect:", "/auth", "/registration");
         }
         return "redirect:/";

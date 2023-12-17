@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.cv2.springcars.mapping.MappingUtility;
@@ -19,6 +20,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
+@EnableCaching
 public class BrandService implements BaseService<BrandDTO, Brand> {
     private BrandRepository brandRepository;
     private MappingUtility mappingUtility;
@@ -37,6 +39,7 @@ public class BrandService implements BaseService<BrandDTO, Brand> {
         return mappingUtility.convertToDto(created);
     }
 
+    @Cacheable(value = "brands", key = "#root.methodName")
     public List<BrandDTO> findMostPopularBrands(int limit) {
         List<BrandDTO> brands = brandRepository.findMostPopular().stream()
                 .limit(limit)
@@ -64,7 +67,7 @@ public class BrandService implements BaseService<BrandDTO, Brand> {
         Brand updated = brandRepository.save(existing);
         return mappingUtility.convertToDto(updated);
     }
-    @CacheEvict(value = "brand", key = "#id")
+    @CacheEvict(value = "brands", key = "#id")
     @Override
     public void delete(UUID id) {
         brandRepository.deleteById(id);

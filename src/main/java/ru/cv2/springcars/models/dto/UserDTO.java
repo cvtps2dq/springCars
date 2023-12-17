@@ -33,7 +33,7 @@ public class UserDTO {
     private String lastName;
     private Boolean isActive;
     private String imageUrl;
-    private LocalDateTime created;
-    private LocalDateTime modified;
+    private String created;
+    private String modified;
     private UserRoleDTO userRoleDTO;
 }

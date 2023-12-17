@@ -13,7 +13,7 @@ public class ModelDTO {
     private String imageUrl;
     private Integer startYear;
     private Integer endYear;
-    private Date created;
-    private Date modified;
+    private String created;
+    private String modified;
     private BrandDTO brand;
 }

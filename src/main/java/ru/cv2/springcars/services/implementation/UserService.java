@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 @Service
+@EnableCaching
 public class UserService implements BaseService<UserDTO, User> {
     private UserRespository userRepository;
     private MappingUtility mappingUtility;
@@ -73,7 +75,7 @@ public class UserService implements BaseService<UserDTO, User> {
 
     private UserDTO saveOrUpdate(UserDTO userDTO) throws EntityExistsException{
 
-        userDTO.setModified(LocalDateTime.now());
+        userDTO.setModified(LocalDateTime.now().toString());
         try {
             return mappingUtility.convertToDto(userRepository.saveAndFlush(mappingUtility.convertToEntity(userDTO)));
         } catch (Exception e) {
@@ -81,10 +83,11 @@ public class UserService implements BaseService<UserDTO, User> {
         }
     }
 
+    @CachePut(value = "users", key = "#result.id")
     public UserDTO registerNewUser(UserDTO userDTO) throws EntityExistsException {
         if(userRepository.findAllByUsername(userDTO.getUsername()).isEmpty()) {
             userDTO.setUserRoleDTO(userRoleService.findByRole(Role.USER));
-            userDTO.setCreated(LocalDateTime.now());
+            userDTO.setCreated(LocalDateTime.now().toString());
             userDTO.setIsActive(true);
             userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
             return saveOrUpdate(userDTO);

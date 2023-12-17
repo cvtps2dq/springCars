@@ -8,61 +8,61 @@ services:
     environment:
       POSTGRES_USERNAME: postgres
       POSTGRES_PASSWORD: root
-      POSTGRES_DB: cardb
+      POSTGRES_DB: carsDB
     volumes:
       - pg_data:/var/lib/postgresql/data
     networks:
       local:
-  prometheus:
-    image: bitnami/prometheus
-    container_name: prometheus_lab2
-    ports:
-      - "9090:9090"
-    networks:
-      local:
-    volumes:
-      - ./src/main/resources/prometheus.yml:/etc/prometheus/prometheus.yml
-    restart: always
-  grafana:
-    image: grafana/grafana
-    container_name: grafana_lab2
-    environment:
-      GF_SECURITY_ADMIN_PASSWORD: admin
-      GF_SECURITY_ADMIN_USER: admin
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./grafana/dashboard.yml:/etc/grafana/provisioning/dashboards/main.yml
-      - ./grafana/dashboards:/var/lib/grafana/dashboards
-    networks:
-      local:
-    depends_on:
-      - prometheus
-  service:
-    build:
-      context: .
-    image: lab2spring:0.2.8
-    container_name: service-backend
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
-      interval: 20s
-      timeout: 20s
-      retries: 5
-    depends_on:
-      - cardb
-      - prometheus
-      - redis
-      - logstash
-    ports:
-      - "8080:8080"
-    environment:
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: root
-      SPRING_DATASOURCE_URL: jdbc:postgresql://cardb:5432/cardb
-      LOGGING_LEVEL_ORG.THYMELEAF: ERROR
-    networks:
-      local:
-
+#  prometheus:
+#    image: bitnami/prometheus
+#    container_name: prometheus_lab2
+#    ports:
+#      - "9090:9090"
+#    networks:
+#      local:
+#    volumes:
+#      - ./src/main/resources/prometheus.yml:/etc/prometheus/prometheus.yml
+#    restart: always
+#  grafana:
+#    image: grafana/grafana
+#    container_name: grafana_lab2
+#    environment:
+#      GF_SECURITY_ADMIN_PASSWORD: admin
+#      GF_SECURITY_ADMIN_USER: admin
+#    ports:
+#      - "3000:3000"
+#    volumes:
+#      - ./grafana/dashboard.yml:/etc/grafana/provisioning/dashboards/main.yml
+#      - ./grafana/dashboards:/var/lib/grafana/dashboards
+#    networks:
+#      local:
+#    depends_on:
+#      - prometheus
+#  service:
+#    build:
+#      context: .
+#    image: lab2spring:0.2.8
+#    container_name: service-backend
+#    healthcheck:
+#      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+#      interval: 20s
+#      timeout: 20s
+#      retries: 5
+#    depends_on:
+#      - cardb
+#      - prometheus
+#      - redis
+#      - logstash
+#    ports:
+#      - "8080:8080"
+#    environment:
+#      SPRING_DATASOURCE_USERNAME: postgres
+#      SPRING_DATASOURCE_PASSWORD: root
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://cardb:5432/cardb
+#      LOGGING_LEVEL_ORG.THYMELEAF: ERROR
+#    networks:
+#      local:
+#
   elasticsearch:
     image: elasticsearch:8.7.0
     container_name: elasticsearch_lab2
@@ -93,7 +93,7 @@ services:
 
   logstash:
     image: logstash:8.7.0
-    container_name: logstash_lab2
+    container_name: logstash
     volumes:
       - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
       - ./logstash/pipeline:/usr/share/logstash/pipeline:ro

@@ -1,11 +1,15 @@
 package ru.cv2.springcars.controllersMVC;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import ru.cv2.springcars.models.Brand;
+import ru.cv2.springcars.models.Offer;
 import ru.cv2.springcars.services.implementation.BrandService;
 import ru.cv2.springcars.services.implementation.ModelService;
 
@@ -13,6 +17,7 @@ import java.util.UUID;
 
 @Controller
 @RequestMapping("/brands_list")
+@Slf4j
 public class BrandListMVC {
 
     private BrandService brandService;
@@ -29,27 +34,34 @@ public class BrandListMVC {
     }
 
     @PostMapping
-    public String createBrand(@ModelAttribute Brand brand) {
+    public String createBrand(@AuthenticationPrincipal UserDetails userDetails, @ModelAttribute Brand brand) {
         brandService.create(brand);
-        return "redirect:/brands";
+        log.info("User {} invoked brand creation",
+                userDetails.getUsername());
+        return "redirect:/";
     }
 
     @PutMapping("/{id}")
-    public String updateBrand(@PathVariable UUID id, @ModelAttribute Brand brand) {
+    public String updateBrand(@AuthenticationPrincipal UserDetails userDetails, @PathVariable UUID id, @ModelAttribute Brand brand) {
         brandService.update(id, brand);
-        return "redirect:/brands";
+        log.info("User {} invoked brand update with id {}",
+                userDetails.getUsername(), id);
+        return "redirect:/";
     }
 
     @DeleteMapping("/{id}")
-    public String deleteBrand(@PathVariable UUID id) {
+    public String deleteBrand(@AuthenticationPrincipal UserDetails userDetails, @PathVariable UUID id) {
         brandService.delete(id);
-        return "redirect:/brands";
+        log.info("User {} invoked brand deletion with id {}",
+                userDetails.getUsername(), id);
+        return "redirect:/";
     }
 
     @GetMapping("/{id}")
     public ModelAndView getBrandById(@PathVariable UUID id) {
         ModelAndView modelAndView = new ModelAndView("brand-details");
         modelAndView.addObject("brand", brandService.getById(id));
+        log.info("Invoke getBrandById -> {}", id);
         return modelAndView;
     }
 
@@ -57,6 +69,7 @@ public class BrandListMVC {
     public ModelAndView getAllBrands() {
         ModelAndView modelAndView = new ModelAndView("brand-list");
         modelAndView.addObject("brands", brandService.getAll());
+        log.info("Invoke getAllBrands");
         return modelAndView;
     }
 
@@ -64,6 +77,7 @@ public class BrandListMVC {
     public ModelAndView getAllModelsFromBrand(@PathVariable UUID id) {
         ModelAndView modelAndView = new ModelAndView("brand-models");
         modelAndView.addObject("models", modelService.getAllByBrandId(id));
+        log.info("Invoke getAllModelsFromBrand -> {}", id);
         return modelAndView;
     }
 
@@ -71,6 +85,7 @@ public class BrandListMVC {
     public ModelAndView getTopBrands() {
         ModelAndView modelAndView = new ModelAndView("top-brands");
         modelAndView.addObject("brands", brandService.findMostPopularBrands(10));
+        log.info("Invoke getTopBrands");
         return modelAndView;
     }
 }
