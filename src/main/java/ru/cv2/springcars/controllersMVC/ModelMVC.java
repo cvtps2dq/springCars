@@ -25,29 +25,7 @@ public class ModelMVC {
     public void setModelService(ModelService modelService) {
         this.modelService = modelService;
     }
-    @PostMapping
-    public String createBrand(@AuthenticationPrincipal UserDetails userDetails, @ModelAttribute Model model) {
-        modelService.create(model);
-        log.info("User {} invoked model creation",
-                userDetails.getUsername());
-        return "redirect:/";
-    }
 
-    @PutMapping("/{id}")
-    public String updateBrand(@AuthenticationPrincipal UserDetails userDetails, @PathVariable UUID id, @ModelAttribute Model model) {
-        modelService.update(id, model);
-        log.info("User {} invoked model update with id {}",
-                userDetails.getUsername(), id);
-        return "redirect:/";
-    }
-
-    @DeleteMapping("/{id}")
-    public String deleteBrand(@AuthenticationPrincipal UserDetails userDetails, @PathVariable UUID id) {
-        modelService.delete(id);
-        log.info("User {} invoked model deletion with id {}",
-                userDetails.getUsername(), id);
-        return "redirect:/";
-    }
     @GetMapping("/all")
     public ModelAndView getAll() {
         ModelAndView modelAndView = new ModelAndView("model-list");

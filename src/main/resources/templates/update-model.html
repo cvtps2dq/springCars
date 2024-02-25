@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>CarSpace</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css" type="text/css">
+</head>
+<body class="d-flex flex-column h-100">
+<div th:replace="fragments/navbar">Navbar</div>
+<main class="flex-shrink-0">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="jumbotron text-center rounded col-md-8 alŒign-self-center pt-5">
+                <div class="justify-content-center">
+                    <h1>Edit model</h1>
+                </div>
+                <form th:object="${model}"
+                      th:action="@{/admin/models/update/{id}(id=${model.getId()})}"
+                      th:method="post"
+                      class="m-md-auto w-50 pb-3">
+                    <div class="mb-3">
+                        <label class="form-label" for="name">Name</label>
+                        <input th:field="*{name}"
+                               th:errorclass="is-invalid"
+                               type="text" class="form-control text-center" id="name" aria-describedby="nameHelp"
+                               name="name"/>
+                        <small th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-danger">Error
+                            message</small>
+                        <label class="form-label" for="name">Start year</label>
+                        <input th:field="*{startYear}"
+                               th:errorclass="is-invalid"
+                               type="number" class="form-control text-center" id="startYear" aria-describedby="nameHelp"
+                               name="name"/>
+                        <small th:if="${#fields.hasErrors('startYear')}" th:errors="*{startYear}" class="text-danger">Error
+                            message</small>
+                        <label class="form-label" for="name">End year</label>
+                        <input th:field="*{endYear}"
+                               th:errorclass="is-invalid"
+                               type="number" class="form-control text-center" id="endYear" aria-describedby="nameHelp"
+                               name="name"/>
+                        <small th:if="${#fields.hasErrors('endYear')}" th:errors="*{endYear}" class="text-danger">Error
+                            message</small>
+
+                    </div>
+                    <button type="submit" class="btn btn-secondary">Edit model</button>
+                </form>
+            </div>
+            <div th:if="${error}" class="alert alert-danger">
+                <p th:text="${error}"></p>
+            </div>
+        </div>
+    </div>
+</main>
+<footer th:replace="fragments/footer"></footer>
+</body>
+</html>

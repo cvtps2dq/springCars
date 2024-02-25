@@ -53,8 +53,6 @@
         <th>Username</th>
         <th>Имя</th>
         <th>Активен?</th>
-        <th>Роль</th>
-
     </tr>
     </thead>
     <tbody>
@@ -62,11 +60,8 @@
         <td th:text="${user.username}"></td>
         <td th:text="${user.firstName}"></td>
         <td th:text="${user.isActive}"></td>
-        <td th:text="${user.role.getRole()}"></td>
-        <!-- Добавьте ссылку для каждого бренда -->
     </tr>
     </tbody>
 </table>
-<!-- Add links or buttons for creating new brands, updating, and deleting -->
 </body>
 </html>

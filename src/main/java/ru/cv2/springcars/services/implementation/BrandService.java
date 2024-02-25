@@ -11,7 +11,6 @@ import ru.cv2.springcars.mapping.MappingUtility;
 import ru.cv2.springcars.models.Brand;
 import ru.cv2.springcars.models.dto.BrandDTO;
 import ru.cv2.springcars.repos.BrandRepository;
-import ru.cv2.springcars.services.BaseService;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -21,7 +20,7 @@ import java.util.stream.Collectors;
 
 @Service
 @EnableCaching
-public class BrandService implements BaseService<BrandDTO, Brand> {
+public class BrandService {
     private BrandRepository brandRepository;
     private MappingUtility mappingUtility;
     @Autowired
@@ -33,7 +32,6 @@ public class BrandService implements BaseService<BrandDTO, Brand> {
         this.mappingUtility = mappingUtility;
     }
 
-    @Override
     public BrandDTO create(Brand brand) {
         Brand created = brandRepository.save(brand);
         return mappingUtility.convertToDto(created);
@@ -59,7 +57,6 @@ public class BrandService implements BaseService<BrandDTO, Brand> {
          return brands;
     }
     @CachePut(value = "brands", key = "#id")
-    @Override
     public BrandDTO update(UUID id, Brand brand) {
         Brand existing = brandRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Brand not found!"));
@@ -68,12 +65,10 @@ public class BrandService implements BaseService<BrandDTO, Brand> {
         return mappingUtility.convertToDto(updated);
     }
     @CacheEvict(value = "brands", key = "#id")
-    @Override
     public void delete(UUID id) {
         brandRepository.deleteById(id);
     }
 
-    @Override
     public BrandDTO getById(UUID id) {
         Brand brand = brandRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException(("Brand not found!")));
@@ -81,7 +76,6 @@ public class BrandService implements BaseService<BrandDTO, Brand> {
     }
 
     @Cacheable(value = "brands", key = "#root.methodName")
-    @Override
     public List<BrandDTO> getAll() {
         List<Brand> brands = brandRepository.findAll();
         return brands.stream()

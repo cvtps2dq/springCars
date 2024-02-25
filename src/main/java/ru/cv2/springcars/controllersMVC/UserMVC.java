@@ -24,6 +24,7 @@ public class UserMVC {
 
     @GetMapping("/all")
     public ModelAndView getAll(@AuthenticationPrincipal UserDetails userDetails) {
+        System.out.println(userService.getAll());
         ModelAndView modelAndView = new ModelAndView("user-list");
         modelAndView.addObject("users", userService.getAll());
         log.info("User {} invoked getAll user",

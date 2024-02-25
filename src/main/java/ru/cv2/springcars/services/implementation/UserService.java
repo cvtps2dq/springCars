@@ -18,7 +18,6 @@ import ru.cv2.springcars.models.dto.UserDTO;
 import ru.cv2.springcars.models.enums.Role;
 import ru.cv2.springcars.repos.OfferRepository;
 import ru.cv2.springcars.repos.UserRespository;
-import ru.cv2.springcars.services.BaseService;
 
 import java.text.MessageFormat;
 import java.time.LocalDateTime;
@@ -27,7 +26,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 @Service
 @EnableCaching
-public class UserService implements BaseService<UserDTO, User> {
+public class UserService{
     private UserRespository userRepository;
     private MappingUtility mappingUtility;
     private OfferRepository offerRepository;
@@ -60,7 +59,6 @@ public class UserService implements BaseService<UserDTO, User> {
 
 
     @CachePut(value = "users", key = "#result.id")
-    @Override
     public UserDTO create(User user) {
         User created = userRepository.save(user);
         return mappingUtility.convertToDto(created);
@@ -98,7 +96,6 @@ public class UserService implements BaseService<UserDTO, User> {
 
 
     @CachePut(value = "users", key = "#id")
-    @Override
     public UserDTO update(UUID id, User user) {
         User existing = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -115,12 +112,10 @@ public class UserService implements BaseService<UserDTO, User> {
 
 
     @CacheEvict(value = "users", key = "#id")
-    @Override
     public void delete(UUID id) {
         userRepository.deleteById(id);
     }
     @Cacheable(value = "users", key = "#id")
-    @Override
     public UserDTO getById(UUID id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found!"));
@@ -128,7 +123,6 @@ public class UserService implements BaseService<UserDTO, User> {
     }
 
     @Cacheable(value = "users", key = "#root.methodName")
-    @Override
     public List<UserDTO> getAll() {
         List<User> users = userRepository.findAll();
         return users.stream()

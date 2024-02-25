@@ -1,59 +1,89 @@
 <!DOCTYPE html>
 <html lang="en" class="h-100" xmlns:th="http://www.thymeleaf.org">
-<body class="d-flex flex-column h-100">
-<main class="flex-shrink-0">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-2"></div>
-            <div class="jumbotron text-center rounded col-md-8 align-self-center pt-5">
-                <form th:action="@{/auth/registration}"
-                      th:method="post"
-                      th:object="${user}"
-                      class="m-md-auto w-50 pb-3">
-                    <div class="mb-3">
-                        <label class="form-label" for="username">Username</label>
-                        <input th:field="*{username}"
-                               th:errorclass="is-invalid"
-                               type="text" class="form-control text-center" id="username" aria-describedby="nameHelp"
-                               name="username"/>
-                        <small th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="text-danger">Error
-                            message</small>
+    <head>
+        <link rel="stylesheet" type="text/css" href="/css/login.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+        <title>CarSpace Register</title>
+    </head>
+    <body class="d-flex flex-column h-100">
+        <video autoplay muted loop id="back">
+            <source src="/video/back.mp4">
+        </video>
+            <div class="wrapper">
+            <div class="grid_container">
+                <div class="container_solid">
+                    <br>
+                    <label class="solid_label_head">CarSpace</label>
+                    <label class="solid_label_reg">welcome</label>
+                    <br>
+                </div>
+                <div class="container_blurred" style="max-width: 550px; padding-top: 25px">
+                    <div class="row" style="max-width: 500px; margin-left: auto; margin-right: auto; padding: 15px;">
+                        <div>
+                            <form th:action="@{/auth/registration}"
+                                  th:method="post"
+                                  th:object="${user}"
+                            style="display: flex; flex-direction: column">
+
+                                <div>
+                                    <label for="username">Username</label>
+                                    <input th:field="*{username}"
+                                           class="text-field__input"
+                                           th:errorclass="is-invalid"
+                                           type="text" id="username" aria-describedby="nameHelp"
+                                           name="username">
+                                    <small th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="text-danger">Error
+                                        message</small>
+                                </div>
+
+                                <div>
+                                    <label for="password">Password</label>
+                                    <input th:field="*{password}"
+                                           class="text-field__input"
+                                           th:errorclass="is-invalid"
+                                           type="text" id="password" aria-describedby="nameHelp"
+                                           name="password">
+                                    <small th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-danger">Error
+                                        message</small>
+                                </div>
+
+                                <div>
+                                    <label for="firstname">First Name</label>
+                                    <input th:field="*{firstName}"
+                                           class="text-field__input"
+                                           th:errorclass="is-invalid"
+                                           type="text" id="firstname" aria-describedby="nameHelp"
+                                           name="firstname">
+                                    <small th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class="text-danger">Error
+                                        message</small>
+                                </div>
+
+                                <div>
+                                    <label for="lastname">Last Name</label>
+                                    <input th:field="*{lastName}"
+                                           class="text-field__input"
+                                           th:errorclass="is-invalid"
+                                           type="text" id="lastname" aria-describedby="nameHelp"
+                                           name="lastname">
+                                    <small th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="text-danger">Error
+                                        message</small>
+                                </div>
+                                <button type="submit" class="button button2">Register</button>
+
+                            </form>
+                            <form action="/auth/registration">
+                                <input class="btn_astext" type="submit" value="Already have an account?" />
+                            </form>
+                        </div>
+
+                        <div th:if="${error}" class="alert alert-danger">
+                            <p th:text="${error}"></p>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label" for="password">Password</label>
-                        <input th:field="*{password}"
-                               th:errorclass="is-invalid"
-                               type="password" class="form-control text-center" id="password" aria-describedby="nameHelp"
-                               name="password"/>
-                        <small th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-danger">Error
-                            message</small>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label" for="firstname">Firstname</label>
-                        <input th:field="*{firstName}"
-                               th:errorclass="is-invalid"
-                               type="text" class="form-control text-center" id="firstname" aria-describedby="nameHelp"
-                               name="firstname"/>
-                        <small th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class="text-danger">Error
-                            message</small>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label" for="lastname">Lastname</label>
-                        <input th:field="*{lastName}"
-                               th:errorclass="is-invalid"
-                               type="text" class="form-control text-center" id="lastname" aria-describedby="nameHelp"
-                               name="lastname"/>
-                        <small th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="text-danger">Error
-                            message</small>
-                    </div>
-                    <button type="submit" class="btn btn-secondary">Register</button>
-                </form>
-            </div>
-            <div th:if="${error}" class="alert alert-danger">
-                <p th:text="${error}"></p>
+                </div>
             </div>
         </div>
-    </div>
-</main>
-</body>
+    </body>
 </html>

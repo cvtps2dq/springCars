@@ -1,67 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Jost&display=swap" rel="stylesheet">
+<html lang="en" class="h-100" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brand List</title>
+    <title>Brands</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css" type="text/css">
 </head>
-<style>
-    body {
-        font-family: 'Jost', sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #f8f8f8;
-    }
-
-    header {
-        background-color: #333;
-        color: #fff;
-        text-align: center;
-        padding: 1em;
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-    }
-
-    th, td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: left;
-    }
-
-    th {
-        background-color: #f2f2f2;
-    }
-
-    img {
-        max-width: 100px;
-        max-height: 60px;
-    }
-</style>
-<body>
-<h1>Brand List</h1>
-<table>
-    <thead>
-    <tr>
-        <th>Название бренда</th>
-        <th>Детали</th> <!-- Новый столбец для ссылок на детали -->
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="brand : ${brands}">
-        <td th:text="${brand.name}"></td>
-        <!-- Добавьте ссылку для каждого бренда -->
-        <td><a th:href="@{'/brands_list/models/' + ${brand.id}}">Подробнее</a></td>
-    </tr>
-    </tbody>
-</table>
-<!-- Add links or buttons for creating new brands, updating, and deleting -->
+<body class="d-flex flex-column h-100">
+<div th:replace="fragments/navbar">Navbar</div>
+<main class="flex-shrink-0">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="jumbotron text-center rounded col-md-8 align-self-center pt-5">
+                <h2 class="text-center text-dark mt-5">All Brands</h2>
+                <div th:each="b : ${brands}" class="d-flex flex-column bg-text mb-3">
+                    <h2 th:text="'Brand: ' + ${b.getName()}"></h2>
+                    <h4><a class="btn-block" sec:authorize="hasAuthority('admin:write')" th:href="@{/admin/brand/edit/{id}(id=${b.getId()})}">Edit brand</a></h4>
+                    <h4><a class="btn-block" th:href="@{/brand/{id}(id=${b.getId()})}">Details info</a></h4>
+                </div>
+                <h4><a class="btn-block" sec:authorize="hasAuthority('admin:write')" th:href="@{/admin/brand/create}">Add brand</a></h4>
+            </div>
+        </div>
+    </div>
+</main>
+<footer th:replace="fragments/footer"></footer>
 </body>
 </html>

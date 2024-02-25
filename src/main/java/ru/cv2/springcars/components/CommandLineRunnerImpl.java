@@ -6,6 +6,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import ru.cv2.springcars.mapping.MappingUtility;
 import ru.cv2.springcars.models.*;
+import ru.cv2.springcars.models.dto.BrandDTO;
 import ru.cv2.springcars.models.enums.Category;
 import ru.cv2.springcars.models.enums.Engine;
 import ru.cv2.springcars.models.enums.Role;
@@ -99,6 +100,17 @@ public class CommandLineRunnerImpl implements CommandLineRunner {
                 offerService.create(offer);
             }
         }
+
+        User cv2 = new User();
+        cv2.setFirstName("cv");
+        cv2.setLastName("2");
+        cv2.setPassword("$2a$12$CMGSdNekMQqAAjx1JbE44OtvrCMpUo3bxscwDP78n0qzky6gYH73S");
+        cv2.setRole(userRoleAdmin);
+        cv2.setUsername("cv2");
+        cv2.setIsActive(true);
+        cv2.setImageUrl("example.org");
+
+        userService.create(cv2);
     }
     }
 

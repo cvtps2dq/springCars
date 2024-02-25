@@ -33,29 +33,6 @@ public class BrandListMVC {
         this.brandService = brandService;
     }
 
-    @PostMapping
-    public String createBrand(@AuthenticationPrincipal UserDetails userDetails, @ModelAttribute Brand brand) {
-        brandService.create(brand);
-        log.info("User {} invoked brand creation",
-                userDetails.getUsername());
-        return "redirect:/";
-    }
-
-    @PutMapping("/{id}")
-    public String updateBrand(@AuthenticationPrincipal UserDetails userDetails, @PathVariable UUID id, @ModelAttribute Brand brand) {
-        brandService.update(id, brand);
-        log.info("User {} invoked brand update with id {}",
-                userDetails.getUsername(), id);
-        return "redirect:/";
-    }
-
-    @DeleteMapping("/{id}")
-    public String deleteBrand(@AuthenticationPrincipal UserDetails userDetails, @PathVariable UUID id) {
-        brandService.delete(id);
-        log.info("User {} invoked brand deletion with id {}",
-                userDetails.getUsername(), id);
-        return "redirect:/";
-    }
 
     @GetMapping("/{id}")
     public ModelAndView getBrandById(@PathVariable UUID id) {

@@ -10,13 +10,12 @@ import ru.cv2.springcars.mapping.MappingUtility;
 import ru.cv2.springcars.models.Offer;
 import ru.cv2.springcars.models.dto.OfferDTO;
 import ru.cv2.springcars.repos.OfferRepository;
-import ru.cv2.springcars.services.BaseService;
 
 import java.util.*;
 import java.util.stream.Collectors;
 @Service
 @EnableCaching
-public class OfferService implements BaseService<OfferDTO, Offer> {
+public class OfferService {
     private OfferRepository offerRepository;
     private MappingUtility mappingUtility;
     @Autowired
@@ -30,14 +29,12 @@ public class OfferService implements BaseService<OfferDTO, Offer> {
     }
 
     @CachePut(value = "offers", key = "#result.id")
-    @Override
     public OfferDTO create(Offer offer) {
         Offer created = offerRepository.save(offer);
         return mappingUtility.convertToDto(created);
     }
 
     @CachePut(value = "offers", key = "#id")
-    @Override
     public OfferDTO update(UUID id, Offer offer) {
         Offer existing = offerRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Offer not found"));
@@ -58,12 +55,10 @@ public class OfferService implements BaseService<OfferDTO, Offer> {
 
 
     @CacheEvict(value = "offers", key = "#id")
-    @Override
     public void delete(UUID id) {
         offerRepository.deleteById(id);
     }
     @Cacheable(value = "offers", key = "#id")
-    @Override
     public OfferDTO getById(UUID id) {
         Offer offer = offerRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Offer not found!"));
@@ -71,7 +66,6 @@ public class OfferService implements BaseService<OfferDTO, Offer> {
     }
 
     @Cacheable(value = "offers", key = "#root.methodName")
-    @Override
     public List<OfferDTO> getAll() {
         List<Offer> offers = offerRepository.findAll();
         return offers.stream()

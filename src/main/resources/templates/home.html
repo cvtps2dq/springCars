@@ -1,16 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-100" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home Page</title>
+    <title>CarSpace</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css" type="text/css">
 </head>
-<body>
-<h1>Welcome to the Home Page</h1>
-<a href="/brands_list/all"><button>Go to Brands List</button></a>
-<a href="/brands_list/top"><button>Top brands by models</button></a>
-<a href="/offers/all"><button>All offers</button></a>
-<a href="/offers/day_pack"><button>Day pack of offers!</button></a>
+<body class="d-flex flex-column h-100">
+<div th:replace="fragments/navbar">Navbar</div>
+<main class="flex-shrink-0">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="jumbotron text-center rounded col-md-8 align-self-center pt-5">
+                <div class="justify-content-center">
+                    <h1>Welcome to CarSpace!</h1>
+                    <a sec:authorize="!isAuthenticated()" class="btn-block" th:href="@{/auth/login}">Log in</a>
+                    <a sec:authorize="!isAuthenticated()" class="btn-block" th:href="@{/auth/registration}">Registration</a>
+                    <form sec:authorize="isAuthenticated()" th:action="@{/auth/logout}" th:method="post">
+                        <button type="submit" class="btn btn-secondary">Logout</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<footer th:replace="fragments/footer"></footer>
 </body>
 </html>
