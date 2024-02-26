@@ -26,7 +26,7 @@ public class OfferMVC {
     }
 
     @PostMapping
-    public String createBrand(@AuthenticationPrincipal UserDetails userDetails,@ModelAttribute Offer offer) {
+    public String createOffer(@AuthenticationPrincipal UserDetails userDetails,@ModelAttribute Offer offer) {
         offerService.create(offer);
         log.info("User {} invoked offer creation",
                 userDetails.getUsername());
@@ -34,7 +34,7 @@ public class OfferMVC {
     }
 
     @PutMapping("/{id}")
-    public String updateBrand(@AuthenticationPrincipal UserDetails userDetails, @PathVariable UUID id, @ModelAttribute Offer offer) {
+    public String updateOffer(@AuthenticationPrincipal UserDetails userDetails, @PathVariable UUID id, @ModelAttribute Offer offer) {
         offerService.update(id, offer);
         log.info("User {} invoked offer update with id {}",
                 userDetails.getUsername(), id);
@@ -42,7 +42,7 @@ public class OfferMVC {
     }
 
     @DeleteMapping("/{id}")
-    public String deleteBrand(@AuthenticationPrincipal UserDetails userDetails, @PathVariable UUID id) {
+    public String deleteOffer(@AuthenticationPrincipal UserDetails userDetails, @PathVariable UUID id) {
         offerService.delete(id);
         log.info("User {} invoked offer deletion with id {}",
                 userDetails.getUsername(), id);

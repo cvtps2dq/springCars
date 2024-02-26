@@ -86,6 +86,11 @@ public class AdminMVC {
         return "update-brand";
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/admin/panel")
+    public String adminPanel(){
+        return "admin-panel";
+    }
+
     @RequestMapping(method = RequestMethod.POST, value = "/brands/update/"+"{id}")
     public String sendUpdate(@Valid Brand brand, BindingResult bindingResult, RedirectAttributes redirectAttributes, @AuthenticationPrincipal UserDetails userDetails) {
         if (bindingResult.hasErrors()) {

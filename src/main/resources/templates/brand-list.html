@@ -15,10 +15,8 @@
                 <h2 class="text-center text-dark mt-5">All Brands</h2>
                 <div th:each="b : ${brands}" class="d-flex flex-column bg-text mb-3">
                     <h2 th:text="'Brand: ' + ${b.getName()}"></h2>
-                    <h4><a class="btn-block" sec:authorize="hasAuthority('admin:write')" th:href="@{/admin/brand/edit/{id}(id=${b.getId()})}">Edit brand</a></h4>
-                    <h4><a class="btn-block" th:href="@{/brand/{id}(id=${b.getId()})}">Details info</a></h4>
+                    <h4><a class="btn-block" th:href="@{/brands_list/{id}(id=${b.getId()})}">Details info</a></h4>
                 </div>
-                <h4><a class="btn-block" sec:authorize="hasAuthority('admin:write')" th:href="@{/admin/brand/create}">Add brand</a></h4>
             </div>
         </div>
     </div>
